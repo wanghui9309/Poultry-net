@@ -1,0 +1,44 @@
+//
+//  Poultry.pch
+//  禽病网
+//
+//  Created by WangHui on 2016/12/12.
+//  Copyright © 2016年 wanghui. All rights reserved.
+//
+
+#ifdef __OBJC__
+
+#import "UIView+Frame.h"
+#import "ShareInstance.h"
+#import "UIImage+Extension.h"
+
+// 屏幕的宽度
+#define WHScreenWidth  [UIScreen mainScreen].bounds.size.width
+#define WHScreenHeight [UIScreen mainScreen].bounds.size.height
+#define WHScreenBounds [UIScreen mainScreen].bounds
+
+#define WHColor(r, g, b) [UIColor colorWithRed: (r)/255.0 green: (g)/255.0 blue: (b)/255.0 alpha: 1.0]
+// 获取随机色
+#define WHRandomColor [UIColor colorWithRed: arc4random()%256/256.0 green: arc4random()%256/256.0 blue: arc4random()%256/256.0 alpha: 1.0]
+
+#define WINDOW        [[UIApplication sharedApplication].delegate window]
+
+// 日志打印
+#ifdef DEBUG
+#define WHString [NSString stringWithFormat:@"%s", __FILE__].lastPathComponent
+#define WHLog(...) printf("%s 第%d行: %s\n\n",[WHString UTF8String] ,__LINE__, [[NSString stringWithFormat:__VA_ARGS__] UTF8String]);
+
+#else
+
+#define WHLog(...)
+
+#endif
+
+// 代码执行时间
+#define TICK   NSDate *startTime = [NSDate date];
+#define TOCK   WHLog(@"Time: %f", -[startTime timeIntervalSinceNow])
+
+/** Nav背景色 */
+#define NavBackGroundColor WHColor(82, 190, 249)
+
+#endif
