@@ -63,26 +63,29 @@
  */
 - (void)removeWKWebViewCahce
 {
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_9_0
-    WKWebsiteDataStore *dateStore = [WKWebsiteDataStore defaultDataStore];
-    [dateStore fetchDataRecordsOfTypes:[WKWebsiteDataStore allWebsiteDataTypes]
-                     completionHandler:^(NSArray<WKWebsiteDataRecord *> * __nonnull records) {
-                         for (WKWebsiteDataRecord *record  in records)
-                         {
-                             [[WKWebsiteDataStore defaultDataStore] removeDataOfTypes:record.dataTypes
-                                                                       forDataRecords:@[record]
-                                                                    completionHandler:^{
-                                                                        WHLog(@"Cookies for %@ deleted successfully",record.displayName);
-                                                                    }];
-                         }
-                     }];
-#else
-    NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    NSString *path = [NSString stringWithFormat:@"/WebKit/%@/WebsiteData/LocalStorage", [[UIApplication sharedApplication] appBundleID]];
-    NSString *webKitWebCachePath = [libraryPath stringByAppendingPathComponent:path];
-    [[NSFileManager defaultManager] removeItemAtPath:webKitWebCachePath error:nil];
-    WHLog(@"%@", webKitWebCachePath)
-#endif
+    if([[UIDevice currentDevice].systemVersion floatValue] >= 9)
+    {
+        WKWebsiteDataStore *dateStore = [WKWebsiteDataStore defaultDataStore];
+        [dateStore fetchDataRecordsOfTypes:[WKWebsiteDataStore allWebsiteDataTypes]
+                         completionHandler:^(NSArray<WKWebsiteDataRecord *> * __nonnull records) {
+                             for (WKWebsiteDataRecord *record  in records)
+                             {
+                                 [[WKWebsiteDataStore defaultDataStore] removeDataOfTypes:record.dataTypes
+                                                                           forDataRecords:@[record]
+                                                                        completionHandler:^{
+                                                                            WHLog(@"Cookies for %@ deleted successfully",record.displayName);
+                                                                        }];
+                             }
+                         }];
+    }
+    else
+    {
+        NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+        NSString *path = [NSString stringWithFormat:@"/WebKit/%@/WebsiteData/LocalStorage", [[UIApplication sharedApplication] appBundleID]];
+        NSString *webKitWebCachePath = [libraryPath stringByAppendingPathComponent:path];
+        [[NSFileManager defaultManager] removeItemAtPath:webKitWebCachePath error:nil];
+        WHLog(@"%@", webKitWebCachePath)
+    }
 }
 
 /**
