@@ -37,7 +37,7 @@ SHARE_INSTANCE_M(NetworkRequest, WHNetworkRequest)
         _sessionManager = [AFHTTPSessionManager manager];
         _sessionManager.requestSerializer.timeoutInterval = 15.0f;
         _sessionManager.responseSerializer = [AFHTTPResponseSerializer serializer];
-        _sessionManager.responseSerializer.acceptableContentTypes =  [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", @"text/html", @"text/plain", @"image/png",nil];
+        _sessionManager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", @"text/html", @"text/plain", @"image/png",nil];
         
         _operationTask = [NSMutableSet set];
         
@@ -105,7 +105,7 @@ SHARE_INSTANCE_M(NetworkRequest, WHNetworkRequest)
     };
     
     NSURLSessionTask *task = nil;
-    urlStr = [@"http://www.qinbing.cn" stringByAppendingPathComponent:urlStr];
+    urlStr = [ServerUrl stringByAppendingPathComponent:urlStr];
     
     switch (requestType)
     {

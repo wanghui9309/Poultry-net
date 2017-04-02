@@ -18,7 +18,15 @@
 
 + (void)load
 {
-    UINavigationBar *navBar = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:@[[self class]]];
+    UINavigationBar *navBar = nil;
+    if([[UIDevice currentDevice].systemVersion floatValue] >= 9)
+    {
+        navBar = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:@[self.class]];
+    }
+    else
+    {
+        navBar = [UINavigationBar appearanceWhenContainedIn:self.class, nil];
+    }
     /*
      navBar.barTintColor = WTColor(42, 183, 103);
      navBar.translucent = NO;

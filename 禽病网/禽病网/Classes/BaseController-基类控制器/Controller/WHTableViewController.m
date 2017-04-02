@@ -13,18 +13,23 @@
 
 #import "WHTableViewCell.h"
 
-#import "WHNetworkRequest.h"
 #import "NSAttributedString+Extension.h"
 #import "TFHpple.h"
 #import <YYCategories/NSString+YYAdd.h>
 #import <DZNEmptyDataSet/UIScrollView+EmptyDataSet.h>
 #import <MJRefresh/MJRefresh.h>
+#import <WebKit/WebKit.h>
 
-@interface WHTableViewController ()<DZNEmptyDataSetSource>
+@interface WHTableViewController ()<DZNEmptyDataSetSource, DZNEmptyDataSetDelegate, WKNavigationDelegate>
 
+/** 数据模型 */
 @property (nonatomic, strong) WHQuotationItem *item;
+/** url */
 @property (nonatomic, strong) NSString *url;
+/** 是否加载成功 */
 @property (nonatomic, assign) BOOL isLoadSuccess;
+/** 网页View */
+@property (nonatomic, weak) WKWebView *wkWebView;
 
 @end
 
@@ -55,6 +60,20 @@ static NSString *const reuseIdentifier = @"TableViewCell";
     return _item;
 }
 
+- (WKWebView *)wkWebView
+{
+    if (_wkWebView == nil)
+    {
+        WKWebView *webView = [[WKWebView alloc] initWithFrame:self.view.frame];
+        webView.hidden = YES;
+        webView.navigationDelegate = self;
+        webView.scrollView.bounces = NO;
+        [self.view insertSubview:webView atIndex:0];
+        _wkWebView = webView;
+    }
+    return _wkWebView;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -63,6 +82,7 @@ static NSString *const reuseIdentifier = @"TableViewCell";
     self.tableView.tableFooterView = [[UIView alloc] init];
     [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([WHTableViewCell class]) bundle:nil] forCellReuseIdentifier:reuseIdentifier];
     self.tableView.emptyDataSetSource = self;
+    self.tableView.emptyDataSetDelegate = self;
     
     self.isLoadSuccess = YES;
     __weak typeof(self) weakSelf = self;
@@ -76,16 +96,14 @@ static NSString *const reuseIdentifier = @"TableViewCell";
     }];
 }
 
-- (void)requestDataWithUrl:(NSString *)url
+/**
+ 请求数据
+ */
+- (void)requestDataWithUrl:(NSString *)urlStr
 {
-    [[WHNetworkRequest shareNetworkRequest] GETWithUrl:url success:^(id responseObject) {
-        
-        [self tableWithData:responseObject];
-        
-    } failure:^(NSError *error) {
-        self.isLoadSuccess = NO;
-        [self endRefreshing];
-    }];
+    NSURL *url = [NSURL URLWithString:[ServerUrl stringByAppendingPathComponent:urlStr]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    [self.wkWebView loadRequest:request];
 }
 
 /**
@@ -96,6 +114,25 @@ static NSString *const reuseIdentifier = @"TableViewCell";
     [self.tableView reloadData];
     [self.tableView.mj_header endRefreshing];
     [self.tableView.mj_footer endRefreshing];
+}
+
+#pragma mark - WKNavigationDelegate
+- (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
+{
+    __weak typeof(self) weakSelf = self;
+    /** 获取网页html */
+    [webView evaluateJavaScript:@"document.body.innerHTML" completionHandler:^(NSString * _Nullable html, NSError * _Nullable error) {
+        if (html.length !=0)
+        {
+            [weakSelf tableWithData:[html dataUsingEncoding:NSUTF8StringEncoding]];
+        }
+        else
+        {
+            weakSelf.isLoadSuccess = NO;
+            [weakSelf endRefreshing];
+        }
+    }];
+    decisionHandler(WKNavigationActionPolicyAllow);
 }
 
 #pragma mark 根据data解析出table 数据
@@ -192,6 +229,14 @@ static NSString *const reuseIdentifier = @"TableViewCell";
 - (UIImage *)imageForEmptyDataSet:(UIScrollView *)scrollView
 {
     return [UIImage imageNamed:@"img_profile_none"];
+}
+
+/**
+ 处理空白区域的点击事件
+ */
+- (void)emptyDataSet:(UIScrollView *)scrollView didTapView:(UIView *)view
+{
+    [self.tableView.mj_header beginRefreshing];
 }
 
 - (void)dealloc

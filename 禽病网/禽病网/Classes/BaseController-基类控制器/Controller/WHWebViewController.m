@@ -31,7 +31,7 @@
 {
     WHWebViewController *webVc = [WHWebViewController new];
     webVc.title = [title stringByReplacingOccurrencesOfString:@"·" withString:@""];
-    webVc.webUrl = [@"http://www.qinbing.cn" stringByAppendingPathComponent:url];
+    webVc.webUrl = [ServerUrl stringByAppendingPathComponent:url];
     
     return webVc;
 }
@@ -53,7 +53,7 @@
 {
     [super viewDidLoad];
     
-    [self removeWKWebViewCahce];
+//    [self removeWKWebViewCahce];
     
     [self loadWkWebView];
 }

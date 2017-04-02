@@ -40,5 +40,6 @@
 
 /** Nav背景色 */
 #define NavBackGroundColor WHColor(82, 190, 249)
+#define ServerUrl          @"http://www.qinbing.cn"
 
 #endif
