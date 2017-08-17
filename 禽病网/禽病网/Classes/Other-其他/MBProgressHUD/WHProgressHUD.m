@@ -18,7 +18,7 @@
  */
 + (void)showMBProgressHUD
 {
-    UIViewController *currentVC = [WHProgressHUD currentViewController:WHProgressHUD.rootViewController()];
+    UIViewController *currentVC = [WHProgressHUD currentViewController:WHProgressHUD.rootViewController];
     [MBProgressHUD showHUDAddedTo:currentVC.view animated:YES];
 }
 
@@ -27,7 +27,7 @@
  */
 + (void)removeMBProgressHUD
 {
-    UIViewController *currentVC = [WHProgressHUD currentViewController:WHProgressHUD.rootViewController()];
+    UIViewController *currentVC = [WHProgressHUD currentViewController:WHProgressHUD.rootViewController];
     [MBProgressHUD hideHUDForView:currentVC.view animated:YES];
 }
 
@@ -38,7 +38,7 @@
  */
 + (void)showMessage:(NSString *)text
 {
-    UIViewController *currentVC = [WHProgressHUD currentViewController:WHProgressHUD.rootViewController()];
+    UIViewController *currentVC = [WHProgressHUD currentViewController:WHProgressHUD.rootViewController];
     // 快速显示一个提示信息
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:currentVC.view animated:YES];
     hud.label.text = text;
@@ -53,11 +53,9 @@
 /**
  获得根控制器
  */
-+ (UIViewController *(^)())rootViewController
++ (UIViewController *)rootViewController
 {
-    return ^{
-        return [[[[UIApplication sharedApplication] delegate] window] rootViewController];
-    };
+    return UIApplication.sharedApplication.delegate.window.rootViewController;
 }
 
 /**
