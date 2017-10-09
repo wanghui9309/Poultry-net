@@ -560,7 +560,8 @@
 				TargetAttributes = {
 					7B6113431DFE534B002AB083 = {
 						CreatedOnToolsVersion = 8.1;
-						ProvisioningStyle = Manual;
+						DevelopmentTeam = 2B48QMGH22;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -795,7 +796,9 @@
 			baseConfigurationReference = 5E4DFE560C49892CC59910DF /* Pods-禽病网.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2B48QMGH22;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "禽病网/Poultry.pch";
 				HEADER_SEARCH_PATHS = "${SDKROOT}/usr/include/libxml2";
@@ -804,6 +807,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.huawei.---";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
@@ -812,7 +816,9 @@
 			baseConfigurationReference = AF6F60CCD0CA84347065B43E /* Pods-禽病网.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2B48QMGH22;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "禽病网/Poultry.pch";
 				HEADER_SEARCH_PATHS = "${SDKROOT}/usr/include/libxml2";
@@ -821,6 +827,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.huawei.---";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
 		};
